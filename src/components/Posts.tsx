@@ -1,25 +1,14 @@
-import { AxiosError } from 'axios';
-import useSWR from 'swr';
-
-type Post = {
-  id: string;
-  title: string;
-  body: string;
-};
+import usePosts from '../hooks/usePosts';
 
 const Posts: React.FC = () => {
-  const { data, error } = useSWR<Post[], AxiosError>(
-    'https://jsonplaceholder.typicode.com/posts'
-  );
+  const { isLoading, data, error } = usePosts();
 
   return (
     <article>
       <h1>Posts</h1>
       {error ? (
-        <p>
-          {error.code} - {error.message}
-        </p>
-      ) : !data ? (
+        <p>{error.message}</p>
+      ) : isLoading ? (
         <p>Now loading...</p>
       ) : data.length < 1 ? (
         <p>No Data</p>

@@ -1,19 +1,15 @@
-import axios from 'axios';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { SWRConfig } from 'swr';
 
+const queryClient = new QueryClient();
 const Home = lazy(() => import('./routes/Home'));
 
 function App() {
   return (
     <React.StrictMode>
-      <SWRConfig
-        value={{
-          fetcher: (url, config) =>
-            axios.get(url, config).then((res) => res.data),
-        }}
-      >
+      <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
@@ -21,7 +17,8 @@ function App() {
             </Routes>
           </Suspense>
         </BrowserRouter>
-      </SWRConfig>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </React.StrictMode>
   );
 }

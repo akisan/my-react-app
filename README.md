@@ -7,8 +7,8 @@
 - インストール
   - [axios](https://github.com/axios/axios)
   - [Emotion](https://emotion.sh/docs/introduction)
+  - [React Query](https://tanstack.com/query/v4)
   - [React Router](https://v5.reactrouter.com/web/guides/quick-start)
-  - [SWR](https://emotion.sh/docs/introduction)
   - Prettier
   - eslint-plugin-import
   - [Husky](https://create-react-app.dev/docs/setting-up-your-editor/#formatting-code-automatically)
