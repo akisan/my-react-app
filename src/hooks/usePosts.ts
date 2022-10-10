@@ -8,13 +8,10 @@ export type Post = {
 };
 
 const usePosts = () =>
-  useQuery<Post[], AxiosError>(
-    ['posts'],
-    () =>
-      axios
-        .get('https://jsonplaceholder.typicode.com/posts')
-        .then((res) => res.data),
-    { enabled: false }
+  useQuery<Post[], AxiosError>(['posts'], () =>
+    axios
+      .get('https://jsonplaceholder.typicode.com/posts')
+      .then((res) => res.data)
   );
 
 export default usePosts;

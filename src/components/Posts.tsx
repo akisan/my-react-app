@@ -1,6 +1,6 @@
 import usePosts from '../hooks/usePosts';
 
-const Posts: React.FC = () => {
+const Posts = () => {
   const { isLoading, data, error } = usePosts();
 
   return (
