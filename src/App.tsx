@@ -1,6 +1,9 @@
+import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   BrowserRouter,
   Navigate,
@@ -28,30 +31,44 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
 };
 
 function App() {
+  const isDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: isDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [isDarkMode]
+  );
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <AuthProvider>
-            <Routes>
-              <Route path="/signin" element={<SignIn />} />
-              <Route
-                path="/"
-                element={
-                  <RequireAuth>
-                    <Layout />
-                  </RequireAuth>
-                }
-              >
-                <Route index element={<Home />} />
-              </Route>
-              {/* <Route path="*" element={<NotFound />} /> */}
-            </Routes>
-          </AuthProvider>
-        </React.Suspense>
-      </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <AuthProvider>
+              <Routes>
+                <Route path="/signin" element={<SignIn />} />
+                <Route
+                  path="/"
+                  element={
+                    <RequireAuth>
+                      <Layout />
+                    </RequireAuth>
+                  }
+                >
+                  <Route index element={<Home />} />
+                </Route>
+                {/* <Route path="*" element={<NotFound />} /> */}
+              </Routes>
+            </AuthProvider>
+          </React.Suspense>
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
