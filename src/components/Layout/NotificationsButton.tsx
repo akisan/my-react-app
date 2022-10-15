@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Notifications } from '@mui/icons-material';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -14,45 +15,75 @@ import MenuList from '@mui/material/MenuList';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Typography from '@mui/material/Typography';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import usePosts from '../../hooks/usePosts';
 
 const NotificationsButton = () => {
   const posts = usePosts();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const popperRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
-  const handleToggle = () => setOpen((prev) => !prev);
+  const handleToggle = useCallback(() => setOpen((prev) => !prev), []);
 
-  const handleListKeyDown = (event: React.KeyboardEvent) => {
+  const handleListKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
     } else if (event.key === 'Escape') {
       setOpen(false);
     }
-  };
+  }, []);
 
-  const handleClick = (event: Event | React.SyntheticEvent) => {
-    if (buttonRef.current?.contains(event.target as HTMLElement)) {
-      return;
-    }
+  const handlePopoverOpen = useCallback(() => setOpen(true), []);
 
-    // setOpen(false);
-  };
+  const handlePopoverClose = useCallback(
+    ({ relatedTarget }: React.MouseEvent<HTMLElement>) => {
+      if (
+        buttonRef.current?.contains(relatedTarget as Node) ||
+        popperRef.current?.contains(relatedTarget as Node)
+      ) {
+        return;
+      }
+
+      setOpen(false);
+    },
+    [buttonRef, popperRef]
+  );
+
+  const handleClick = useCallback(
+    (event: Event | React.SyntheticEvent) => {
+      if (buttonRef.current?.contains(event.target as HTMLElement)) {
+        return;
+      }
+
+      setOpen(false);
+    },
+    [buttonRef]
+  );
 
   return (
     <>
-      <IconButton ref={buttonRef} color="inherit" onClick={handleToggle}>
-        <Notifications />
-      </IconButton>
+      <Badge badgeContent={posts.data?.length} color="primary">
+        <IconButton
+          ref={buttonRef}
+          color="inherit"
+          onClick={handleToggle}
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
+        >
+          <Notifications />
+        </IconButton>
+      </Badge>
       <Popper
+        ref={popperRef}
         open={open}
         anchorEl={buttonRef.current}
         role={undefined}
         placement="bottom-start"
         transition
         disablePortal
+        onMouseLeave={handlePopoverClose}
       >
         {({ TransitionProps, placement }) => (
           <Grow
