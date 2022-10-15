@@ -46,7 +46,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
           <React.Suspense fallback={<div>Loading...</div>}>
             <AuthProvider>
               <Routes>
