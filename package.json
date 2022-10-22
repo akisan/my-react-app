@@ -58,6 +58,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "build": "react-scripts build",
+    "postbuild": "cp build/index.html build/404.html",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "react-scripts test"
