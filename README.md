@@ -1,7 +1,7 @@
 # my-react-app
 
 - [Demo](https://akisan.github.io/my-react-app)
-- テンプレート: [cra-template-pwa-typescript](https://create-react-app.dev/docs/making-a-progressive-web-app/
+- テンプレート: [cra-template-pwa-typescript](https://create-react-app.dev/docs/making-a-progressive-web-app/)
 
 ## 変更内容
 
